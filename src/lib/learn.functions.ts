@@ -318,16 +318,15 @@ export const submitLesson = createServerFn({ method: "POST" })
     return { results, score, total, xp, streak: profile?.streak_count ?? 0, newBadges: earned };
   });
 
-type AuthedContext = { supabase: ReturnType<typeof Object>; userId: string };
+type AuthedContext = {
+  supabase: import("@supabase/supabase-js").SupabaseClient<
+    import("@/integrations/supabase/types").Database
+  >;
+  userId: string;
+};
 
-async function applyXpAndStreak(context: never | AuthedContext, xp: number) {
-  const ctx = context as unknown as {
-    supabase: {
-      from: (t: string) => never;
-    };
-    userId: string;
-  };
-  const supabase = ctx.supabase as unknown as import("@supabase/supabase-js").SupabaseClient;
+async function applyXpAndStreak(ctx: AuthedContext, xp: number) {
+  const { supabase } = ctx;
 
   const { data: profile } = await supabase
     .from("profiles")
