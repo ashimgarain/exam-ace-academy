@@ -10,12 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as LearnRouteImport } from './routes/learn'
+import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedChapterChapterSlugRouteImport } from './routes/_authenticated/chapter.$chapterSlug'
+import { Route as AuthenticatedLessonLessonIdRouteImport } from './routes/_authenticated/lesson.$lessonId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -28,33 +36,81 @@ const LearnRoute = LearnRouteImport.update({
   path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedChapterChapterSlugRoute =
+  AuthenticatedChapterChapterSlugRouteImport.update({
+    id: '/chapter/$chapterSlug',
+    path: '/chapter/$chapterSlug',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedLessonLessonIdRoute =
+  AuthenticatedLessonLessonIdRouteImport.update({
+    id: '/lesson/$lessonId',
+    path: '/lesson/$lessonId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/learn': typeof LearnRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/chapter/$chapterSlug': typeof AuthenticatedChapterChapterSlugRoute
+  '/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/learn': typeof LearnRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/chapter/$chapterSlug': typeof AuthenticatedChapterChapterSlugRoute
+  '/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/learn': typeof LearnRoute
+  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/chapter/$chapterSlug': typeof AuthenticatedChapterChapterSlugRoute
+  '/_authenticated/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/learn'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/learn'
+    | '/onboarding'
+    | '/chapter/$chapterSlug'
+    | '/lesson/$lessonId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/learn'
-  id: '__root__' | '/' | '/auth' | '/learn'
+  to:
+    | '/'
+    | '/auth'
+    | '/learn'
+    | '/onboarding'
+    | '/chapter/$chapterSlug'
+    | '/lesson/$lessonId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/learn'
+    | '/_authenticated/onboarding'
+    | '/_authenticated/chapter/$chapterSlug'
+    | '/_authenticated/lesson/$lessonId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   LearnRoute: typeof LearnRoute
 }
@@ -66,6 +122,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -82,11 +145,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/onboarding': {
+      id: '/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/chapter/$chapterSlug': {
+      id: '/_authenticated/chapter/$chapterSlug'
+      path: '/chapter/$chapterSlug'
+      fullPath: '/chapter/$chapterSlug'
+      preLoaderRoute: typeof AuthenticatedChapterChapterSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/lesson/$lessonId': {
+      id: '/_authenticated/lesson/$lessonId'
+      path: '/lesson/$lessonId'
+      fullPath: '/lesson/$lessonId'
+      preLoaderRoute: typeof AuthenticatedLessonLessonIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
+  AuthenticatedChapterChapterSlugRoute: typeof AuthenticatedChapterChapterSlugRoute
+  AuthenticatedLessonLessonIdRoute: typeof AuthenticatedLessonLessonIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+  AuthenticatedChapterChapterSlugRoute: AuthenticatedChapterChapterSlugRoute,
+  AuthenticatedLessonLessonIdRoute: AuthenticatedLessonLessonIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   LearnRoute: LearnRoute,
 }
