@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedChapterChapterSlugRouteImport } from './routes/_authenticated/chapter.$chapterSlug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -39,18 +40,26 @@ const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedChapterChapterSlugRoute =
+  AuthenticatedChapterChapterSlugRouteImport.update({
+    id: '/chapter/$chapterSlug',
+    path: '/chapter/$chapterSlug',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/learn': typeof LearnRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/chapter/$chapterSlug': typeof AuthenticatedChapterChapterSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/learn': typeof LearnRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/chapter/$chapterSlug': typeof AuthenticatedChapterChapterSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -59,12 +68,13 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/learn': typeof LearnRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/chapter/$chapterSlug': typeof AuthenticatedChapterChapterSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/learn' | '/onboarding'
+  fullPaths: '/' | '/auth' | '/learn' | '/onboarding' | '/chapter/$chapterSlug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/learn' | '/onboarding'
+  to: '/' | '/auth' | '/learn' | '/onboarding' | '/chapter/$chapterSlug'
   id:
     | '__root__'
     | '/'
@@ -72,6 +82,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/learn'
     | '/_authenticated/onboarding'
+    | '/_authenticated/chapter/$chapterSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -118,15 +129,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/chapter/$chapterSlug': {
+      id: '/_authenticated/chapter/$chapterSlug'
+      path: '/chapter/$chapterSlug'
+      fullPath: '/chapter/$chapterSlug'
+      preLoaderRoute: typeof AuthenticatedChapterChapterSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
+  AuthenticatedChapterChapterSlugRoute: typeof AuthenticatedChapterChapterSlugRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+  AuthenticatedChapterChapterSlugRoute: AuthenticatedChapterChapterSlugRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
