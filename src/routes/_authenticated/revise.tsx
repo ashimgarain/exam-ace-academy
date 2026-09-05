@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_authenticated/revise")({
       { property: "og:description", content: "Revise today's due cards in a few minutes." },
     ],
   }),
-  component: Revise;
+  component: Revise,
 });
 
 function Revise() {
