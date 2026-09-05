@@ -561,7 +561,7 @@ export const speakLesson = createServerFn({ method: "POST" })
     const { allowed } = await canAccessChapter(context.userId, lesson.chapter_slug);
     if (!allowed) throw new Error("This chapter is part of the full course.");
 
-    let content = lesson.content as Json;
+    let content = lesson.content as Record<string, unknown>;
     if (data.language !== "en") {
       const { data: t } = await supabaseAdmin
         .from("lesson_translations")
