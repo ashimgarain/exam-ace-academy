@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
+import type { Json } from "@/integrations/supabase/types";
 
 const chapterInput = z.object({ chapterSlug: z.string().min(1), language: z.string().default("en") });
 const lessonInput = z.object({ lessonId: z.string().uuid(), language: z.string().default("en") });
@@ -45,7 +46,10 @@ export const updatePreferences = createServerFn({ method: "POST" })
     z.object({ exam_slug: z.string().optional(), language: z.string().optional() }).parse(input),
   )
   .handler(async ({ data, context }) => {
-    const { error } = await context.supabase.from("profiles").update(data).eq("id", context.userId);
+    const patch: { exam_slug?: string; language?: string } = {};
+    if (data.exam_slug) patch.exam_slug = data.exam_slug;
+    if (data.language) patch.language = data.language;
+    const { error } = await context.supabase.from("profiles").update(patch).eq("id", context.userId);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -98,7 +102,7 @@ export const getChapterBundle = createServerFn({ method: "POST" })
             chapter_slug: chapter.slug,
             sort_order: i + 1,
             title: lesson.title,
-            content: lesson.content as unknown as Record<string, unknown>,
+            content: lesson.content as unknown as Json,
           })
           .select("id")
           .single();
@@ -107,7 +111,7 @@ export const getChapterBundle = createServerFn({ method: "POST" })
           lesson_id: inserted.id,
           sort_order: qi + 1,
           question: q.question,
-          options: q.options as unknown as Record<string, unknown>,
+          options: q.options as unknown as Json,
           correct_index: Math.max(0, Math.min(q.options.length - 1, q.correct_index ?? 0)),
           explanation: q.explanation ?? null,
         }));
@@ -162,7 +166,7 @@ export const getLesson = createServerFn({ method: "POST" })
     const { chapter, allowed } = await canAccessChapter(context.userId, lesson.chapter_slug);
     if (!allowed) throw new Error("This chapter is part of the full course.");
 
-    let content = lesson.content as Record<string, unknown>;
+    let content = lesson.content as Json;
     if (data.language !== "en") {
       const { data: existing } = await supabaseAdmin
         .from("lesson_translations")
@@ -171,15 +175,15 @@ export const getLesson = createServerFn({ method: "POST" })
         .eq("language", data.language)
         .maybeSingle();
       if (existing) {
-        content = existing.content as Record<string, unknown>;
+        content = existing.content as Json;
       } else {
         const translated = await translateLessonContent(content as never, data.language);
         await supabaseAdmin.from("lesson_translations").insert({
           lesson_id: lesson.id,
           language: data.language,
-          content: translated as unknown as Record<string, unknown>,
+          content: translated as unknown as Json,
         });
-        content = translated as unknown as Record<string, unknown>;
+        content = translated as unknown as Json;
       }
     }
 

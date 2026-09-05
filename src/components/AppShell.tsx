@@ -20,8 +20,8 @@ export function AppShell({
   streak,
 }: {
   children: ReactNode;
-  xp?: number;
-  streak?: number;
+  xp?: number | undefined;
+  streak?: number | undefined;
 }) {
   const { theme, toggle } = useTheme();
   const { user } = useAuth();
