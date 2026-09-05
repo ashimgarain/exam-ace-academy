@@ -16,6 +16,7 @@ import { Route as LearnRouteImport } from './routes/learn'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedLeaderboardRouteImport } from './routes/_authenticated/leaderboard'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedPricingRouteImport } from './routes/_authenticated/pricing'
 import { Route as AuthenticatedReviseRouteImport } from './routes/_authenticated/revise'
 import { Route as AuthenticatedChapterChapterSlugRouteImport } from './routes/_authenticated/chapter.$chapterSlug'
 import { Route as AuthenticatedLessonLessonIdRouteImport } from './routes/_authenticated/lesson.$lessonId'
@@ -55,6 +56,11 @@ const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPricingRoute = AuthenticatedPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedReviseRoute = AuthenticatedReviseRouteImport.update({
   id: '/revise',
   path: '/revise',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/pricing': typeof AuthenticatedPricingRoute
   '/revise': typeof AuthenticatedReviseRoute
   '/chapter/$chapterSlug': typeof AuthenticatedChapterChapterSlugRoute
   '/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/pricing': typeof AuthenticatedPricingRoute
   '/revise': typeof AuthenticatedReviseRoute
   '/chapter/$chapterSlug': typeof AuthenticatedChapterChapterSlugRoute
   '/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/pricing': typeof AuthenticatedPricingRoute
   '/_authenticated/revise': typeof AuthenticatedReviseRoute
   '/_authenticated/chapter/$chapterSlug': typeof AuthenticatedChapterChapterSlugRoute
   '/_authenticated/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/leaderboard'
     | '/onboarding'
+    | '/pricing'
     | '/revise'
     | '/chapter/$chapterSlug'
     | '/lesson/$lessonId'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/leaderboard'
     | '/onboarding'
+    | '/pricing'
     | '/revise'
     | '/chapter/$chapterSlug'
     | '/lesson/$lessonId'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/leaderboard'
     | '/_authenticated/onboarding'
+    | '/_authenticated/pricing'
     | '/_authenticated/revise'
     | '/_authenticated/chapter/$chapterSlug'
     | '/_authenticated/lesson/$lessonId'
@@ -203,6 +215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/pricing': {
+      id: '/_authenticated/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof AuthenticatedPricingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/revise': {
       id: '/_authenticated/revise'
       path: '/revise'
@@ -231,6 +250,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedLeaderboardRoute: typeof AuthenticatedLeaderboardRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
+  AuthenticatedPricingRoute: typeof AuthenticatedPricingRoute
   AuthenticatedReviseRoute: typeof AuthenticatedReviseRoute
   AuthenticatedChapterChapterSlugRoute: typeof AuthenticatedChapterChapterSlugRoute
   AuthenticatedLessonLessonIdRoute: typeof AuthenticatedLessonLessonIdRoute
@@ -240,6 +260,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedLeaderboardRoute: AuthenticatedLeaderboardRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+  AuthenticatedPricingRoute: AuthenticatedPricingRoute,
   AuthenticatedReviseRoute: AuthenticatedReviseRoute,
   AuthenticatedChapterChapterSlugRoute: AuthenticatedChapterChapterSlugRoute,
   AuthenticatedLessonLessonIdRoute: AuthenticatedLessonLessonIdRoute,
