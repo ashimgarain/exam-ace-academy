@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { Award, Clock, Flame, Repeat2, Target, Zap } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { getDashboard } from "@/lib/learn.functions";
@@ -21,8 +22,13 @@ function title(slug: string) {
 }
 
 function Dashboard() {
+  const navigate = useNavigate();
   const { data } = useQuery({ queryKey: ["dashboard"], queryFn: () => getDashboard() });
   const profile = data?.profile;
+
+  useEffect(() => {
+    if (data && profile && !profile.onboarded) navigate({ to: "/onboarding", replace: true });
+  }, [data, profile, navigate]);
   const level = Math.floor((profile?.xp ?? 0) / 500) + 1;
   const intoLevel = (profile?.xp ?? 0) % 500;
 
