@@ -1,18 +1,20 @@
 # GyaanPath roadmap
 
-## In progress
-- [ ] Onboarding page
-- [ ] Chapter page (lesson list, generate on first open, locked state)
-- [ ] Lesson player (content, language, listen, quiz, XP, report)
-- [ ] Dashboard (streak, XP, mastery, accuracy, minutes, badges)
-- [ ] Revise deck (spaced repetition)
-- [ ] Leaderboard (all-time + weekly)
-- [ ] Pricing + Razorpay Checkout
-- [ ] Razorpay webhook endpoint
-- [ ] Apply pending content-locking migration
+## Done
+- [x] Onboarding page
+- [x] Chapter page (lesson list, generate on first open, locked state)
+- [x] Lesson player (content, language, listen, quiz, XP, report)
+- [x] Dashboard (streak, XP, mastery, accuracy, minutes, badges)
+- [x] Revise deck (spaced repetition)
+- [x] Leaderboard
+- [x] Pricing + Razorpay Checkout
+- [x] Razorpay webhook endpoint
+- [x] Content-locking migration applied
+
+## Waiting on the user
+- [ ] Razorpay Key ID, Key Secret, Webhook Secret
 
 ## Next
-- [ ] Razorpay test keys from user
 - [ ] Daily current affairs brief
 - [ ] PYQ tagging
 - [ ] Mock tests with percentile
